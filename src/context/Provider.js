@@ -4,6 +4,7 @@ import PlanetsContext from './PlanetsContext';
 
 const Provider = ({ children }) => {
   const [data, setData] = useState([]);
+  const [name, setName] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,15 +15,27 @@ const Provider = ({ children }) => {
     fetchData();
   }, []);
 
+  const handleInput = ({ target: { value } }) => {
+    setName(value);
+  };
+
+  const context = {
+    data,
+    handleInput,
+    filterByName: {
+      name,
+    },
+  };
+
   return (
-    <PlanetsContext.Provider value={ data }>
+    <PlanetsContext.Provider value={ context }>
       {children}
     </PlanetsContext.Provider>
   );
 };
 
 Provider.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
 export default Provider;
