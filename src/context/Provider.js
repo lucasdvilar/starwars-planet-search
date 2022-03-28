@@ -7,6 +7,7 @@ const Provider = ({ children }) => {
   const [name, setName] = useState('');
   const [filters, setFilters] = useState([]);
   const [filteredPlanets, setFilteredPlanets] = useState([]);
+  const [filtersNum, setFiltersNum] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,25 +24,28 @@ const Provider = ({ children }) => {
 
   const onFilterBtnClick = (column, comparison, value) => {
     setFilters([...filters, { column, comparison, value }]);
+    setFiltersNum(filtersNum + 1);
   };
 
   useEffect(() => {
     const filterPlanets = () => {
       if (filters.length > 0) {
-        const filterValue = Number(filters[0].value);
-        if (filters[0].comparison === 'maior que') {
-          const test = data
-            .filter((planet) => Number(planet[filters[0].column]) > filterValue);
+        const index = filtersNum - 1;
+        const filterValue = Number(filters[index].value);
+        const base = index === 0 ? data : filteredPlanets;
+        if (filters[index].comparison === 'maior que') {
+          const test = base
+            .filter((planet) => Number(planet[filters[index].column]) > filterValue);
           setFilteredPlanets(test);
         }
-        if (filters[0].comparison === 'menor que') {
-          const test = data
-            .filter((planet) => Number(planet[filters[0].column]) < filterValue);
+        if (filters[index].comparison === 'menor que') {
+          const test = base
+            .filter((planet) => Number(planet[filters[index].column]) < filterValue);
           setFilteredPlanets(test);
         }
-        if (filters[0].comparison === 'igual a') {
-          const test = data
-            .filter((planet) => Number(planet[filters[0].column]) === filterValue);
+        if (filters[index].comparison === 'igual a') {
+          const test = base
+            .filter((planet) => Number(planet[filters[index].column]) === filterValue);
           setFilteredPlanets(test);
         }
       } else {
@@ -49,7 +53,7 @@ const Provider = ({ children }) => {
       }
     };
     filterPlanets();
-  }, [filters, name]);
+  }, [filtersNum, name]);
 
   const context = {
     data,
