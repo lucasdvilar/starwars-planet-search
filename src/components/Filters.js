@@ -5,7 +5,7 @@ const Filters = () => {
   const [column, setColumn] = useState('population');
   const [comparison, setComparison] = useState('maior que');
   const [value, setValue] = useState(0);
-  const { handleInput, onFilterBtnClick } = useContext(PlanetsContext);
+  const { handleInput, onFilterBtnClick, columnSelect } = useContext(PlanetsContext);
 
   const handleInputChange = ({ target: { value: targetValue, name } }) => {
     if (name === 'column') {
@@ -30,11 +30,7 @@ const Filters = () => {
         name="column"
         onChange={ handleInputChange }
       >
-        <option>population</option>
-        <option>orbital_period</option>
-        <option>diameter</option>
-        <option>rotation_period</option>
-        <option>surface_water</option>
+        {columnSelect.map((columnOpt) => <option key={ columnOpt }>{columnOpt}</option>)}
       </select>
       <select
         data-testid="comparison-filter"

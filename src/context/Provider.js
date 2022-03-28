@@ -8,6 +8,13 @@ const Provider = ({ children }) => {
   const [filters, setFilters] = useState([]);
   const [filteredPlanets, setFilteredPlanets] = useState([]);
   const [filtersNum, setFiltersNum] = useState(0);
+  const [columnSelect, setColumnSelect] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +55,8 @@ const Provider = ({ children }) => {
             .filter((planet) => Number(planet[filters[index].column]) === filterValue);
           setFilteredPlanets(test);
         }
+        const newColumn = columnSelect.filter((opt) => opt !== filters[index].column);
+        setColumnSelect(newColumn);
       } else {
         setFilteredPlanets(data);
       }
@@ -64,6 +73,7 @@ const Provider = ({ children }) => {
     onFilterBtnClick,
     filterByNumericValues: filters,
     filteredPlanets,
+    columnSelect,
   };
 
   return (
